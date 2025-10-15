@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.Name }} | MyShop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>
+    </nav>
+
+    <div class="product-container">
+        <img src="{{ url_for('static', filename='images/' + product.ProdID + '.jpg') }}" alt="{{ product.Name }}">
+        <h1>{{ product.Name }}</h1>
+        <p>Price: ₹{{ product.Price }}</p>
+        <button class="add-to-cart">Add to Cart</button>
+    </div>
+
+    <h2>Similar Products</h2>
+    <div class="product-grid">
+        {% for recommendation in recommendations %}
+        <div class="product-card">
+            <a href="{{ url_for('product_page', prodid=recommendation.ProdID) }}">
+                <img src="{{ url_for('static', filename='images/' + recommendation.ProdID + '.jpg') }}" alt="{{ recommendation.Name }}">
+                <h3>{{ recommendation.Name }}</h3>
+            </a>
+            <p>Price: ₹{{ recommendation.Price }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

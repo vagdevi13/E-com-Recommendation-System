@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | MyShop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}" class="btn">Home</a>
+            <a href="{{ url_for('logout') }}" class="btn logout">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard">
+        <h1>Welcome, {{ user.username }}! 🎉</h1>
+
+        <!-- Search Form -->
+        <form method="POST" action="{{ url_for('search_results') }}" class="search-container">
+            <input type="text" name="search" id="search-bar" placeholder="Search for products...">
+            <button type="submit" class="search-btn">🔍</button>
+        </form>
+
+        {% if products %}
+            <!-- Personalized Recommendations -->
+            {% if recommended_products %}
+            <div class="recommendation-section">
+                <h2>Recommended for You 💡</h2>
+                <div class="product-grid">
+                    {% for product in recommended_products %}
+                    <a href="/product/{{ product.ProdID }}" class="product-card" onclick="trackClick('{{ product.ProdID }}')">
+                        <img src="{{ url_for('static', filename='images/' + product.ProdID + '.jpg') }}" alt="{{ product.Name }}">
+                        <h3>{{ product.Name }}</h3>
+                        <p>Price: ₹{{ product.Price }}</p>
+                        <p>Rating: ⭐ {{ '%.1f' | format(product['stars']) }}/5</p>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Product Grid -->
+            <div class="product-grid">
+                {% for product in products %}
+                <a href="/product/{{ product.ProdID }}" class="product-card" onclick="trackClick('{{ product.ProdID }}')">
+                    <img src="{{ url_for('static', filename='images/' + product.ProdID + '.jpg') }}" alt="{{ product.Name }}">
+                    <h3>{{ product.Name }}</h3>
+                    <p>Price: ₹{{ product.Price }}</p>
+                    <p>Rating: ⭐ {{ '%.1f' | format(product['stars']) }}/5</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Recommendations Section -->
+    <div id="recommendationsList" class="product-grid" style="margin-top: 30px;"></div>
+
+    <!-- JavaScript -->
+    <script>
+        function trackClick(prodID) {
+            fetch('/track_click', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `prod_id=${prodID}`
+            }).catch(err => console.error('Click tracking failed:', err));
+        }
+    </script>
+
+    <style>
+        #recommendationsList .product-card {
+            cursor: pointer;
+        }
+    </style>
+</body>
+</html>

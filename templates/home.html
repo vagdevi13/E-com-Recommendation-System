@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | My E-commerce Site</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="{{ url_for('login') }}" class="btn">Login</a>
+            <a href="{{ url_for('register') }}" class="btn">Register</a>
+        </div>
+    </nav>
+
+    <!-- Project Title -->
+    <!-- Project Title -->
+    <div class="project-title">
+        <h2>🛒 SMART SHOPPING: A Deep Learning-Driven Product Recommendation System</h2>
+    </div>
+    <div class="hero">
+        <h1>Welcome to My E-commerce Site</h1>
+        <p>Shop the best products with AI-powered recommendations.</p>
+        <a href="{{ url_for('login') }}" class="cta-button">Start Shopping</a>
+    </div>
+</body>
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3>About website</h3>
+                <p>Your go-to destination for AI-powered product recommendations. We blend tech with shopping for a smarter experience.</p>
+            </div>
+            <div class="footer-section team">
+                <h3>Our Team</h3>
+                <ul>
+                    <li>Y Vagdevi</li>
+                    <li>S Ammaji</li>
+                    <li>S Jaswitha</li>
+                    <li>S Dhanush Kumar</li>
+                </ul>
+            </div>
+            <div class="footer-section contact">
+                <h3>Contact</h3>
+                <p>Email: 2021cse.ri4@svce.edu.in</p>
+                <p>Phone: +91-12345-67890</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Smart Shopping. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>
+            <a href="{{ url_for('logout') }}" class="btn logout">Logout</a>
+        </div>
+    </nav>
+    
+    <!-- Sort Dropdown -->
+    <form method="post" action="{{ url_for('search_results') }}" id="sortForm">
+        <input type="hidden" name="search" value="{{ search_query }}">
+        <label for="sort_by">Sort by:</label>
+        <select name="sort_by" id="sort_by">
+            <option value="">Relevance</option>
+            <option value="price_asc" {% if request.form.get('sort_by') == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+            <option value="price_desc" {% if request.form.get('sort_by') == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            <option value="rating_desc" {% if request.form.get('sort_by') == 'rating_desc' %}selected{% endif %}>Rating: High to Low</option>
+        </select>
+    </form>
+
+    <!-- JS to auto-submit form on change -->
+    <script>
+        document.getElementById("sort_by").addEventListener("change", function () {
+            document.getElementById("sortForm").submit();
+        });
+    </script>
+
+    <!-- Page Content -->
+    <div class="dashboard">
+        <h2>Search results for: <em>{{ search_query }}</em></h2>
+
+        {% if products %}
+        <div class="product-grid">
+            {% for product in products %}
+            <a href="/product/{{ product.ProdID }}" class="product-card" onclick="trackClick('{{ product.ProdID }}')">
+                <img src="{{ url_for('static', filename='images/' + product.ProdID + '.jpg') }}" alt="{{ product.Name }}">
+                <h3>{{ product.Name }}</h3>
+                <p>Price: ₹{{ product.Price }}</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p style="text-align:center;">No matching products found.</p>
+        {% endif %}
+    </div>
+
+    <!-- JS for tracking clicks -->
+    <script>
+        function trackClick(prodID) {
+            fetch('/track_click', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `prod_id=${prodID}`
+            }).catch(err => console.error('Click tracking failed:', err));
+        }
+    </script>
+</body>
+</html>
